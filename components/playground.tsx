@@ -38,7 +38,7 @@ export default function Playground() {
         output: "",
     });
     return (
-        <div className="w-11/12 mx-auto rounded-xl border ring-8 ring-slate-600">
+        <div className="w-5/6 mx-auto rounded-xl border ring-8 ring-slate-600">
             <div className="md:hidden">
                 <Image
                     src="/examples/playground-light.png"
@@ -80,7 +80,7 @@ export default function Playground() {
                                                     style={{ height: "300px" }}
                                                 > */}
                                             {/* <SplitterPanel className="flex align-items-center justify-content-center"> */}
-                                            <div className="flex flex-1 flex-col space-y-2">
+                                            <div className="flex flex-col space-y-2">
                                                 <label
                                                     className="text-lg"
                                                     htmlFor="input"
@@ -95,11 +95,14 @@ export default function Playground() {
                                             {/* </SplitterPanel>
                                                     <SplitterPanel className="flex align-items-center justify-content-center"> */}
                                             <div className="flex flex-col space-y-2">
-                                                <Label htmlFor="instructions">
-                                                    Note
+                                                <Label
+                                                    className="text-lg"
+                                                    htmlFor="notes"
+                                                >
+                                                    Notes
                                                 </Label>
                                                 <Textarea
-                                                    id="instructions"
+                                                    id="notes"
                                                     placeholder="Some Notes for the program"
                                                 />
                                             </div>
@@ -109,11 +112,14 @@ export default function Playground() {
                                         <div className="flex flex-col space-y-2">
                                             <label
                                                 className="text-lg"
-                                                htmlFor="div"
+                                                htmlFor="output"
                                             >
                                                 Output
                                             </label>
-                                            <div className="mt-[21px] min-h-[400px] rounded-md border bg-muted lg:min-h-[700px] h-full" />
+                                            <div
+                                                id="output"
+                                                className="mt-[21px] min-h-[300px] rounded-md border bg-muted lg:min-h-[550px] h-full"
+                                            />
                                         </div>
                                     </div>
                                     <div className="flex items-center space-x-2">
