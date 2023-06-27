@@ -4,27 +4,31 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Tabs } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { History, Play } from "lucide-react";
+import { Copy, Eraser, Play } from "lucide-react";
 
 import "@/app/globals.css";
 import { CodeViewer } from "@/components/code-viewer";
 import { PresetActions } from "@/components/preset-actions";
 import { PresetSave } from "@/components/preset-save";
-import { PresetSelector } from "@/components/preset-selector";
 import { PresetShare } from "@/components/preset-share";
-import { presets } from "@/data/presets";
+import { ProgramSelector } from "@/components/program-selector";
+import { Programs } from "@/data/presets";
 
+import Badges from "@/components/badges";
 import CodeEditor from "@/components/code-editor";
+import Tips from "@/components/tips";
 import amrit, { builtins, keywords } from "@/data/amrit";
 import clsx from "clsx";
+import { decompressFromEncodedURIComponent } from "lz-string";
 import { Lexend } from "next/font/google";
+import { useSearchParams } from "next/navigation";
 import Prism from "prismjs";
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
 import "prismjs/themes/prism.css";
-import { useState } from "react";
-import Badges from "./badges";
-import Tips from "./tips";
+import { useEffect, useState } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
+import useClipboard from "react-use-clipboard";
 
 const lexend = Lexend({ subsets: ["latin"] });
 const programmingTips = [
@@ -54,12 +58,88 @@ export type playgroundData = {
 };
 
 Prism.languages.amrit = amrit;
-export default function Playground() {
-    const [data, setData] = useState<playgroundData>({
+const Playground = () => {
+    const searchParams = useSearchParams();
+    const play = searchParams.get("play");
+
+    let tmp = {
         code: "",
         note: "",
         output: "",
-    });
+    };
+    if (localStorage.getItem("playground")) {
+        tmp = JSON.parse(localStorage.getItem("playground") as string);
+    }
+    if (play) {
+        tmp = JSON.parse(decompressFromEncodedURIComponent(play as string));
+    }
+
+    let localProgramPresets: Programs = Programs;
+    if (localStorage.getItem("playground-programs")) {
+        localProgramPresets = JSON.parse(
+            localStorage.getItem("playground-programs") as string
+        ) as Programs;
+    }
+
+    const [data, setData] = useState<playgroundData>(tmp);
+    const [programPresets, setProgramPresets] =
+        useState<Programs>(localProgramPresets);
+    const [selectedPreset, setSelectedPreset] = useState<string>("");
+    const [, copyCode] = useClipboard(data.code);
+    const [, copyOutput] = useClipboard(data.output);
+
+    const deletePreset = (name: string) => {
+        const { [name]: _, ...rest } = programPresets;
+        setProgramPresets(rest);
+        localStorage.setItem("playground-programs", JSON.stringify(rest));
+    };
+
+    const saveProgramPreset = (name: string, code: string) => {
+        setProgramPresets({ name: code, ...programPresets });
+        localStorage.setItem("playground-programs", JSON.stringify(data));
+    };
+    const loadProgram = (programName: keyof typeof Programs) => {
+        setData({
+            ...data,
+            code: Programs[programName],
+        });
+        localStorage.setItem("playground", JSON.stringify(data));
+    };
+    const runScriptModeCode = (keyboardEvent: KeyboardEvent | undefined) => {
+        keyboardEvent?.preventDefault();
+        console.log("generating output");
+
+        setData({
+            ...data,
+            // @ts-ignore-next-line
+            output: ScriptMode(data.code),
+        });
+        localStorage.setItem("playground", JSON.stringify(data));
+    };
+
+    useHotkeys("ctrl+enter", runScriptModeCode);
+
+    useEffect(() => {
+        const loadWasm = async () => {
+            try {
+                const response = await fetch("/main.wasm");
+                const buffer = await response.arrayBuffer();
+
+                const go = new Go();
+                const mod = await WebAssembly.instantiate(
+                    buffer,
+                    go.importObject
+                );
+
+                go.run(mod.instance);
+            } catch (error) {
+                console.error("Failed to load Wasm file:", error);
+            }
+        };
+
+        loadWasm();
+    }, []);
+
     return (
         <div className="w-4/5 mx-auto rounded-[2rem]">
             <div className="glass p-6 rounded-2xl">
@@ -74,13 +154,21 @@ export default function Playground() {
                             Playground
                         </h2>
                         <div className="ml-auto flex w-full space-x-2 sm:justify-end">
-                            <PresetSelector presets={presets} />
-                            <PresetSave />
+                            <ProgramSelector
+                                presets={programPresets}
+                                loadProgram={loadProgram}
+                                selectedPreset={selectedPreset}
+                                setSelectedPreset={setSelectedPreset}
+                            />
+                            <PresetSave saveProgramPreset={saveProgramPreset} />
                             <div className="hidden space-x-2 md:flex">
                                 <CodeViewer />
-                                <PresetShare />
+                                <PresetShare data={data} />
                             </div>
-                            <PresetActions />
+                            <PresetActions
+                                currentPreset={selectedPreset}
+                                deletePreset={deletePreset}
+                            />
                         </div>
                     </div>
                     <Separator />
@@ -119,15 +207,24 @@ export default function Playground() {
                                                 > */}
                                                 {/* <SplitterPanel className="flex align-items-center justify-content-center"> */}
                                                 <div className="flex flex-col space-y-2">
-                                                    <label
-                                                        className="text-lg"
-                                                        htmlFor="input"
-                                                    >
-                                                        Program
-                                                    </label>
+                                                    <div className="flex felx-row justify-between">
+                                                        <label
+                                                            className="text-lg"
+                                                            htmlFor="input"
+                                                        >
+                                                            Program
+                                                        </label>
+                                                        <Button
+                                                            onClick={copyCode}
+                                                        >
+                                                            <Copy className="h-4 w-4 mx-1" />
+                                                            Copy
+                                                        </Button>
+                                                    </div>
                                                     <CodeEditor
                                                         data={data}
                                                         setData={setData}
+                                                        autofocus
                                                     />
                                                 </div>
                                                 {/* </SplitterPanel>
@@ -142,35 +239,72 @@ export default function Playground() {
                                                     <Textarea
                                                         id="notes"
                                                         placeholder="Some Notes for the program"
+                                                        value={data.note}
+                                                        onChange={(e) => {
+                                                            setData({
+                                                                ...data,
+                                                                note: e.target
+                                                                    .value,
+                                                            });
+                                                            localStorage.setItem(
+                                                                "playground",
+                                                                JSON.stringify(
+                                                                    data
+                                                                )
+                                                            );
+                                                        }}
                                                     />
                                                 </div>
                                                 {/* </SplitterPanel> */}
                                                 {/* </Splitter> */}
                                             </div>
                                             <div className="flex flex-col space-y-2">
-                                                <label
-                                                    className="text-lg"
-                                                    htmlFor="output"
-                                                >
-                                                    Output
-                                                </label>
+                                                <div className="flex felx-row justify-between">
+                                                    <label
+                                                        className="text-lg"
+                                                        htmlFor="input"
+                                                    >
+                                                        Output
+                                                    </label>
+                                                    <Button
+                                                        onClick={copyOutput}
+                                                    >
+                                                        <Copy className="h-4 w-4 mx-1" />
+                                                        Copy
+                                                    </Button>
+                                                </div>
                                                 <div
                                                     id="output"
-                                                    className="mt-[21px] min-h-[300px] rounded-md border bg-muted lg:min-h-[550px] h-full"
-                                                />
+                                                    className="mt-[21px] min-h-[300px] rounded-md border bg-muted lg:min-h-[550px] h-full font-mono p-2"
+                                                >
+                                                    {data.output}
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="flex items-center space-x-2">
-                                            <Button className="text-lg">
+                                            <Button
+                                                className="text-lg"
+                                                onClick={() => {
+                                                    runScriptModeCode(
+                                                        undefined
+                                                    );
+                                                }}
+                                            >
                                                 <Play className="h-5 w-5 text-white mx-1" />
                                                 Run
                                             </Button>
-                                            {/* <Button variant="secondary">
-                                                <span className="sr-only">
-                                                    Show history
-                                                </span>
-                                                <History className="h-4 w-4" />
-                                            </Button> */}
+                                            <Button
+                                                variant="secondary"
+                                                onClick={() => {
+                                                    setData({
+                                                        ...data,
+                                                        output: "",
+                                                    });
+                                                }}
+                                            >
+                                                <Eraser className="h-4 w-4 mx-1" />
+                                                Clear Console
+                                            </Button>
                                         </div>
                                     </div>
                                 </div>
@@ -181,4 +315,6 @@ export default function Playground() {
             </div>
         </div>
     );
-}
+};
+
+export default Playground;

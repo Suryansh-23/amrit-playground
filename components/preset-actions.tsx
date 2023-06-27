@@ -32,7 +32,13 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "@/components/ui/use-toast";
 
-export function PresetActions() {
+export function PresetActions({
+    currentPreset,
+    deletePreset,
+}: {
+    currentPreset: string;
+    deletePreset: (arg0: string) => void;
+}) {
     const [open, setIsOpen] = React.useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
 
@@ -127,6 +133,7 @@ export function PresetActions() {
                             variant="destructive"
                             onClick={() => {
                                 setShowDeleteDialog(false);
+                                deletePreset(currentPreset);
                                 toast({
                                     description:
                                         "This preset has been deleted.",

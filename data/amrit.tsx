@@ -50,50 +50,50 @@ export const keywords: {
 } = {
     कार्य: (
         <p>
-            Also, called <code>karya</code>. Represents a function or a block of
+            Also, called <code data-chip="code">karya</code>. Represents a function or a block of
             code.
         </p>
     ),
     माना: (
         <p>
-            Also, called <code>let</code>.Used to assign a value to a variable.
+            Also, called <code data-chip="code">let</code>.Used to assign a value to a variable.
         </p>
     ),
     अगर: (
         <p>
-            Also, called <code>if</code>. Used to specify a conditional
+            Also, called <code data-chip="code">if</code>. Used to specify a conditional
             statement. Executes a block of code if the specified condition is
             सत्य.
         </p>
     ),
     वरना: (
         <p>
-            Also, called <code>else</code>. Used in conjunction with अगर.
+            Also, called <code data-chip="code">else</code>. Used in conjunction with अगर.
             Specifies an alternative block of code to execute if the condition
             in अगर is असत्य.
         </p>
     ),
     लाभ: (
         <p>
-            Also, called <code>return</code>. Used to specify the return value
+            Also, called <code data-chip="code">return</code>. Used to specify the return value
             of a function or a block of code.
         </p>
     ),
     जबतक: (
         <p>
-            Also, called <code>while</code>. Specifies a loop that continues as
+            Also, called <code data-chip="code">while</code>. Specifies a loop that continues as
             long as the specified condition is सत्य. The loop will terminate
             once the condition becomes असत्य.
         </p>
     ),
     सत्य: (
         <p>
-            Also, called <code>true</code>. Represents the value for सत्य.
+            Also, called <code data-chip="code">true</code>. Represents the value for सत्य.
         </p>
     ),
     असत्य: (
         <p>
-            Also, called <code>false</code>. Represents the value for असत्य.
+            Also, called <code data-chip="code">false</code>. Represents the value for असत्य.
         </p>
     ),
 };
@@ -101,13 +101,13 @@ export const keywords: {
 export const builtins = {
     lambai: (
         <p>
-            Similar to <code>len()</code> in Python. Returns the length of an
+            Similar to <code data-chip="code">len()</code> in Python. Returns the length of an
             array or a string.
         </p>
     ),
     print: (
         <p>
-            Similar to <code>print()</code>in Python. Prints the specified value
+            Similar to <code data-chip="code">print()</code>in Python. Prints the specified value
             to the console.
         </p>
     ),

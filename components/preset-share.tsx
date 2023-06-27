@@ -8,17 +8,39 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import { compressToEncodedURIComponent } from "lz-string";
+import { playgroundData } from "./playground";
+import { useState } from "react";
+import useClipboard from "react-use-clipboard";
 
-export function PresetShare() {
+interface PresetShareProps {
+    data: playgroundData;
+}
+
+export function PresetShare({ data }: PresetShareProps) {
+    const [shareURL, setShareURL] = useState<string>("");
+    const [, copyShareURL] = useClipboard(shareURL);
+
     return (
         <Popover>
             <PopoverTrigger asChild>
-                <Button variant="secondary">Share</Button>
+                <Button
+                    variant="secondary"
+                    onClick={() => {
+                        setShareURL(
+                            `http://localhost:3000/?play=${compressToEncodedURIComponent(
+                                JSON.stringify(data)
+                            )}`
+                        );
+                    }}
+                >
+                    Share
+                </Button>
             </PopoverTrigger>
             <PopoverContent align="end" className="w-[520px]">
                 <div className="flex flex-col space-y-2 text-center sm:text-left">
                     <h3 className="text-lg font-semibold">Share preset</h3>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-mut                                                                                                             ed-foreground">
                         Anyone who has this link and an OpenAI account will be
                         able to view this.
                     </p>
@@ -30,12 +52,17 @@ export function PresetShare() {
                         </Label>
                         <Input
                             id="link"
-                            defaultValue="https://platform.openai.com/playground/p/7bbKYQvsVkNmVb8NGcdUOLae?model=text-davinci-003"
+                            defaultValue={shareURL}
                             readOnly
                             className="h-9"
                         />
                     </div>
-                    <Button type="submit" size="sm" className="px-3">
+                    <Button
+                        type="submit"
+                        size="sm"
+                        className="px-3"
+                        onClick={copyShareURL}
+                    >
                         <span className="sr-only">Copy</span>
                         <Copy className="h-4 w-4" />
                     </Button>

@@ -10,8 +10,18 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useState } from "react";
 
-export function PresetSave() {
+export function PresetSave({
+    saveProgramPreset,
+}: {
+    saveProgramPreset: (arg0: string, arg1: string) => void;
+}) {
+    const [presetData, setPresetData] = useState<{
+        name: string;
+        description: string;
+    }>({ name: "", description: "" });
+
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -28,15 +38,44 @@ export function PresetSave() {
                 <div className="grid gap-4 py-4">
                     <div className="grid gap-2">
                         <Label htmlFor="name">Name</Label>
-                        <Input id="name" autoFocus />
+                        <Input
+                            id="name"
+                            value={presetData.name}
+                            onChange={(e) => {
+                                setPresetData({
+                                    ...presetData,
+                                    name: e.target.value,
+                                });
+                            }}
+                            autoFocus
+                        />
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="description">Description</Label>
-                        <Input id="description" />
+                        <Input
+                            id="description"
+                            value={presetData.description}
+                            onChange={(e) => {
+                                setPresetData({
+                                    ...presetData,
+                                    description: e.target.value,
+                                });
+                            }}
+                        />
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button type="submit">Save</Button>
+                    <Button
+                        type="submit"
+                        onClick={() => {
+                            saveProgramPreset(
+                                presetData.name,
+                                presetData.description
+                            );
+                        }}
+                    >
+                        Save
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

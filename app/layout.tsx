@@ -3,6 +3,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { motion, AnimatePresence } from "framer-motion";
+import Head from "next/head";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,6 +15,16 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
+            <Script
+                src="/wasm_exec.js"
+                onLoad={() => {
+                    if (!WebAssembly) {
+                        console.warn(
+                            "WebAssembly is not supported in your browser"
+                        );
+                    }
+                }}
+            />
             <body className={inter.className}>
                 <ThemeProvider
                     attribute="class"

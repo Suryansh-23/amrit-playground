@@ -1,11 +1,10 @@
 "use client";
 
-import * as React from "react";
-import { useRouter } from "next/navigation";
 import { PopoverProps } from "@radix-ui/react-popover";
 import { Check, ChevronsUpDown } from "lucide-react";
+import { useRouter } from "next/navigation";
+import * as React from "react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
     Command,
@@ -19,50 +18,58 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
-import { Preset } from "@/data/presets";
+import { Programs } from "@/data/presets";
 
-interface PresetSelectorProps extends PopoverProps {
-    presets: Preset[];
+interface ProgramSelectorProps extends PopoverProps {
+    presets: Programs;
+    loadProgram: (arg0: keyof typeof Programs) => void;
+    selectedPreset: string;
+    setSelectedPreset: (arg0: string) => void;
 }
 
-export function PresetSelector({ presets, ...props }: PresetSelectorProps) {
+export function ProgramSelector({
+    presets,
+    loadProgram,
+    selectedPreset,
+    setSelectedPreset,
+    ...props
+}: ProgramSelectorProps) {
     const [open, setOpen] = React.useState(false);
-    const [selectedPreset, setSelectedPreset] = React.useState<Preset>();
-    const router = useRouter();
-
     return (
         <Popover open={open} onOpenChange={setOpen} {...props}>
             <PopoverTrigger asChild>
                 <Button
                     variant="outline"
                     role="combobox"
-                    aria-label="Load a preset..."
+                    aria-label="Load a program..."
                     aria-expanded={open}
                     className="flex-1 justify-between md:max-w-[200px] lg:max-w-[300px]"
                 >
-                    {selectedPreset ? selectedPreset.name : "Load a preset..."}
+                    {selectedPreset ? selectedPreset : "Load a program..."}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[300px] p-0">
                 <Command>
-                    <CommandInput placeholder="Search presets..." />
+                    <CommandInput placeholder="Search programs..." />
                     <CommandEmpty>No presets found.</CommandEmpty>
                     <CommandGroup heading="Examples">
-                        {presets.map((preset) => (
+                        {Object.keys(presets).map((name: string) => (
                             <CommandItem
-                                key={preset.id}
+                                key={name}
                                 onSelect={() => {
-                                    setSelectedPreset(preset);
+                                    setSelectedPreset(name);
                                     setOpen(false);
+                                    loadProgram(name as keyof typeof Programs);
                                 }}
                             >
-                                {preset.name}
+                                {name}
                                 <Check
                                     className={cn(
                                         "ml-auto h-4 w-4",
-                                        selectedPreset?.id === preset.id
+                                        selectedPreset === name
                                             ? "opacity-100"
                                             : "opacity-0"
                                     )}
@@ -71,7 +78,7 @@ export function PresetSelector({ presets, ...props }: PresetSelectorProps) {
                         ))}
                     </CommandGroup>
                     <CommandGroup className="pt-0">
-                        <CommandItem onSelect={() => router.push("/examples")}>
+                        <CommandItem onSelect={console.log}>
                             More examples
                         </CommandItem>
                     </CommandGroup>

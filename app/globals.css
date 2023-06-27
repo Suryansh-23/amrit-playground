@@ -118,7 +118,7 @@
     background-repeat: no-repeat;
 }
 
-code {
+code[data-chip="code"] {
     @apply bg-gray-300 px-1 rounded-md;
 }
 
