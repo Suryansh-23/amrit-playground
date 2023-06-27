@@ -65,7 +65,7 @@ const Hero = () => {
                     </Balancer>
                 </motion.h1>
                 <motion.p
-                    className="mt-6 text-center text-gray-500 md:text-xl"
+                    className="mt-6 text-center font-medium text-gray-600 md:text-xl"
                     variants={FADE_DOWN_ANIMATION_VARIANTS}
                 >
                     <Balancer ratio={0.6}>
@@ -82,7 +82,7 @@ const Hero = () => {
                                     <div className="flex flex-col items-center justify-center space-y-3 p-10 text-center sm:max-w-xs">
                                         <p className="text-sm text-gray-700">
                                             Amrit is an Interpreted Language
-                                            Built on top of GoLang
+                                            built on top of GoLang
                                         </p>
                                         <a
                                             href="https://github.com/Suryansh-23/amrit"
