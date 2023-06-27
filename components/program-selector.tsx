@@ -2,8 +2,7 @@
 
 import { PopoverProps } from "@radix-ui/react-popover";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { useRouter } from "next/navigation";
-import * as React from "react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +19,7 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
+import { useToast } from "@/components/ui/use-toast";
 import { Programs } from "@/data/presets";
 
 interface ProgramSelectorProps extends PopoverProps {
@@ -36,7 +36,9 @@ export function ProgramSelector({
     setSelectedPreset,
     ...props
 }: ProgramSelectorProps) {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
+    const { toast } = useToast();
+
     return (
         <Popover open={open} onOpenChange={setOpen} {...props}>
             <PopoverTrigger asChild>
@@ -78,8 +80,16 @@ export function ProgramSelector({
                         ))}
                     </CommandGroup>
                     <CommandGroup className="pt-0">
-                        <CommandItem onSelect={console.log}>
-                            More examples
+                        <CommandItem
+                            onSelect={() => {
+                                toast({
+                                    title: "Add some Sample Programs!",
+                                    description:
+                                        "Go add some more sample programs for other to see. Go over to the Github Repo and submit a PR",
+                                });
+                            }}
+                        >
+                            And many more...
                         </CommandItem>
                     </CommandGroup>
                 </Command>

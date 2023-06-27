@@ -1,10 +1,10 @@
 "use client";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
+import { AnimatePresence, motion } from "framer-motion";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import { motion, AnimatePresence } from "framer-motion";
-import Head from "next/head";
 import Script from "next/script";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -38,6 +38,7 @@ export default function RootLayout({
                             exit={{ opacity: 0 }}
                         >
                             {children}
+                            <Toaster />
                         </motion.div>
                     </AnimatePresence>
                 </ThemeProvider>

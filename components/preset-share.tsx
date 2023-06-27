@@ -12,6 +12,8 @@ import { compressToEncodedURIComponent } from "lz-string";
 import { playgroundData } from "./playground";
 import { useState } from "react";
 import useClipboard from "react-use-clipboard";
+import { QRCodeSVG } from "qrcode.react";
+import { Separator } from "@/components/ui/separator";
 
 interface PresetShareProps {
     data: playgroundData;
@@ -37,15 +39,42 @@ export function PresetShare({ data }: PresetShareProps) {
                     Share
                 </Button>
             </PopoverTrigger>
-            <PopoverContent align="end" className="w-[520px]">
-                <div className="flex flex-col space-y-2 text-center sm:text-left">
-                    <h3 className="text-lg font-semibold">Share preset</h3>
-                    <p className="text-sm text-mut                                                                                                             ed-foreground">
-                        Anyone who has this link and an OpenAI account will be
-                        able to view this.
+            <PopoverContent align="end" className="w-[420px]">
+                <div className="flex flex-col space-y-2 text-center align-middle sm:text-left">
+                    <h3 className="text-lg font-semibold self-center">
+                        Share Playground
+                    </h3>
+                    <div className="flex flex-col items-center pb-4">
+                        <h1 className="text-base font-medium mb-3">
+                            Scan QR Code
+                        </h1>
+                        <div
+                            id="svg-container"
+                            className="ring-8 ring-gray-200 rounded"
+                        >
+                            <QRCodeSVG
+                                value={shareURL}
+                                size={128}
+                                bgColor={"#ffffff"}
+                                fgColor={"#000000"}
+                                level="L"
+                                includeMargin={false}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <Separator className="w-[45%]" />
+                        <div className="text-center">Or</div>
+                        <Separator className="w-[45%]" />
+                    </div>
+                    <h1 className="text-base font-medium self-center">
+                        Share a Link
+                    </h1>
+                    <p className="text-sm text-muted-foreground self-center">
+                        Anyone with this link can open the playground.
                     </p>
                 </div>
-                <div className="flex items-center space-x-2 pt-4">
+                <div className="flex items-center space-x-2 pt-2">
                     <div className="grid flex-1 gap-2">
                         <Label htmlFor="link" className="sr-only">
                             Link

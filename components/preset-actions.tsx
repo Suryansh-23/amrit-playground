@@ -1,8 +1,7 @@
 "use client";
 
-import * as React from "react";
 import { Dialog } from "@radix-ui/react-dialog";
-import { Flag, MoreHorizontal, Trash } from "lucide-react";
+import { Flag, Github, MoreHorizontal, Trash } from "lucide-react";
 
 import {
     AlertDialog,
@@ -16,7 +15,6 @@ import {
 import { Button } from "@/components/ui/button";
 import {
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -28,9 +26,9 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { toast } from "@/components/ui/use-toast";
+import Link from "next/link";
+import { useState } from "react";
 
 export function PresetActions({
     currentPreset,
@@ -39,8 +37,8 @@ export function PresetActions({
     currentPreset: string;
     deletePreset: (arg0: string) => void;
 }) {
-    const [open, setIsOpen] = React.useState(false);
-    const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
+    const [open, setIsOpen] = useState(false);
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
     return (
         <>
@@ -54,7 +52,7 @@ export function PresetActions({
                 <DropdownMenuContent align="end">
                     <DropdownMenuItem onSelect={() => setIsOpen(true)}>
                         <Flag className="mr-2 h-4 w-4" />
-                        Content filter preferences
+                        Report a Bug
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
@@ -69,40 +67,24 @@ export function PresetActions({
             <Dialog open={open} onOpenChange={setIsOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Content filter preferences</DialogTitle>
-                        <DialogDescription>
-                            The content filter flags text that may violate our
-                            content policy. It&apos;s powered by our moderation
-                            endpoint which is free to use to moderate your
-                            OpenAI API traffic. Learn more.
-                        </DialogDescription>
+                        <DialogTitle>Report a Bug</DialogTitle>
                     </DialogHeader>
-                    <div className="py-6">
-                        <h4 className="text-sm text-muted-foreground">
-                            Playground Warnings
-                        </h4>
-                        <div className="flex items-start justify-between space-x-4 pt-3">
-                            <Switch
-                                name="show"
-                                id="show"
-                                defaultChecked={true}
-                            />
-                            <Label
-                                className="grid gap-1 font-normal"
-                                htmlFor="show"
-                            >
-                                <span className="font-semibold">
-                                    Show a warning when content is flagged
-                                </span>
-                                <span className="text-sm text-muted-foreground">
-                                    A warning will be shown when sexual,
-                                    hateful, violent or self-harm content is
-                                    detected.
-                                </span>
-                            </Label>
-                        </div>
+                    <div className="pt-2">
+                        Did you see a bug in this playground, feel free to
+                        report a issue over at the Github Repo. If you have a
+                        fix, feel free to open a pull request.
                     </div>
                     <DialogFooter>
+                        <Link
+                            href="https://github.com/Suryansh-23/amrit-playground/issues/new"
+                            target="_blank"
+                            rel="noreferrer noopener"
+                        >
+                            <Button>
+                                <Github className="h-5 w-5 mr-2 text-white transition-all group-hover:text-black" />
+                                Github Repo
+                            </Button>
+                        </Link>
                         <Button
                             variant="secondary"
                             onClick={() => setIsOpen(false)}

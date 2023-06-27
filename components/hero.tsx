@@ -6,8 +6,9 @@ import {
 } from "@/components/ui/tooltip";
 import clsx from "clsx";
 import { motion } from "framer-motion";
-import { Twitter, Code2, Github } from "lucide-react";
+import { Code2, Github, Twitter } from "lucide-react";
 import { Lexend } from "next/font/google";
+import Link from "next/link";
 import Balancer from "react-wrap-balancer";
 
 const FADE_DOWN_ANIMATION_VARIANTS = {
@@ -84,7 +85,7 @@ const Hero = () => {
                                             Amrit is an Interpreted Language
                                             built on top of GoLang
                                         </p>
-                                        <a
+                                        <Link
                                             href="https://github.com/Suryansh-23/amrit"
                                             target="_blank"
                                             rel="noreferrer noopener"
@@ -92,7 +93,7 @@ const Hero = () => {
                                         >
                                             <Github className="h-5 w-5 mr-2 text-white transition-all group-hover:text-black" />
                                             Github Repo
-                                        </a>
+                                        </Link>
                                     </div>
                                 </TooltipContent>
                             </Tooltip>

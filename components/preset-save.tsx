@@ -11,16 +11,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 export function PresetSave({
     saveProgramPreset,
 }: {
-    saveProgramPreset: (arg0: string, arg1: string) => void;
+    saveProgramPreset: (arg0: string) => void;
 }) {
     const [presetData, setPresetData] = useState<{
         name: string;
         description: string;
     }>({ name: "", description: "" });
+    const { toast } = useToast();
 
     return (
         <Dialog>
@@ -68,10 +70,23 @@ export function PresetSave({
                     <Button
                         type="submit"
                         onClick={() => {
-                            saveProgramPreset(
+                            console.log(
                                 presetData.name,
                                 presetData.description
                             );
+                            saveProgramPreset(presetData.name);
+                            toast({
+                                title: "You've successfully saved a program preset!",
+                                description: (
+                                    <p>
+                                        The saved program preset&apos;s name is{" "}
+                                        <code data-chip="code">
+                                            {presetData.name}
+                                        </code>
+                                        .
+                                    </p>
+                                ),
+                            });
                         }}
                     >
                         Save

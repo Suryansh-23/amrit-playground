@@ -7,7 +7,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Copy, Eraser, Play } from "lucide-react";
 
 import "@/app/globals.css";
-import { CodeViewer } from "@/components/code-viewer";
 import { PresetActions } from "@/components/preset-actions";
 import { PresetSave } from "@/components/preset-save";
 import { PresetShare } from "@/components/preset-share";
@@ -29,6 +28,7 @@ import "prismjs/themes/prism.css";
 import { useEffect, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import useClipboard from "react-use-clipboard";
+import { set } from "date-fns";
 
 const lexend = Lexend({ subsets: ["latin"] });
 const programmingTips = [
@@ -63,7 +63,7 @@ const Playground = () => {
     const play = searchParams.get("play");
 
     let tmp = {
-        code: "",
+        code: Object.values(Programs)[0],
         note: "",
         output: "",
     };
@@ -92,16 +92,26 @@ const Playground = () => {
         const { [name]: _, ...rest } = programPresets;
         setProgramPresets(rest);
         localStorage.setItem("playground-programs", JSON.stringify(rest));
+
+        const tmp = Object.keys(rest)[0] as keyof typeof Programs;
+        loadProgram(tmp);
+        setSelectedPreset(tmp);
     };
 
-    const saveProgramPreset = (name: string, code: string) => {
-        setProgramPresets({ name: code, ...programPresets });
-        localStorage.setItem("playground-programs", JSON.stringify(data));
+    const saveProgramPreset = (name: string) => {
+        console.log(name, data.code);
+        const tmp = structuredClone(programPresets);
+        tmp[name] = data.code;
+        setProgramPresets(tmp);
+        localStorage.setItem(
+            "playground-programs",
+            JSON.stringify(programPresets)
+        );
     };
     const loadProgram = (programName: keyof typeof Programs) => {
         setData({
             ...data,
-            code: Programs[programName],
+            code: programPresets[programName],
         });
         localStorage.setItem("playground", JSON.stringify(data));
     };
@@ -162,7 +172,6 @@ const Playground = () => {
                             />
                             <PresetSave saveProgramPreset={saveProgramPreset} />
                             <div className="hidden space-x-2 md:flex">
-                                <CodeViewer />
                                 <PresetShare data={data} />
                             </div>
                             <PresetActions
