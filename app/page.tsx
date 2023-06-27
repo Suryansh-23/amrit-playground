@@ -9,12 +9,14 @@ import highlight from "@/public/highlight.svg";
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
 import "prismjs/themes/prism.css";
+import Navbar from "@/components/navbar";
 
 export default function Home() {
     return (
         <>
+            <Navbar />
             <Hero />
-            <main className="mt-20">
+            <main id="playground" className="mt-20">
                 <h1 className=" mb-10 text-center font-display text-stone-700 font-display text-3xl font-bold tracking-[-0.02em] drop-shadow-sm md:text-7xl md:leading-[6rem] relative">
                     C&apos;mon
                     <span className="relative mx-8">

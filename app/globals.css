@@ -77,10 +77,9 @@
     }
 }
 
-/* body {
-    background-image: url("/playground-bg.jpg");
-} */
-
+html {
+    scroll-behavior: smooth;
+}
 .token.operator {
     background: none !important;
 }

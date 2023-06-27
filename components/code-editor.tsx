@@ -31,7 +31,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
                     fontFamily: '"Fira code", "Fira Mono", monospace',
                     fontSize: 16,
                 }}
-                autoFocus={autofocus}
+                // autoFocus={autofocus}
             />
         </div>
     );

@@ -37,7 +37,7 @@ const Hero = () => {
             >
                 <motion.a
                     variants={FADE_DOWN_ANIMATION_VARIANTS}
-                    href="https://twitter.com/steventey/status/1616505632001232896"
+                    href="https://twitter.com/SuriPuri23"
                     target="_blank"
                     rel="noreferrer"
                     className="mx-auto mb-5 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full bg-blue-100 px-7 py-2 transition-colors hover:bg-blue-200"
@@ -54,7 +54,7 @@ const Hero = () => {
                     )}
                     variants={FADE_DOWN_ANIMATION_VARIANTS}
                 >
-                    <Balancer ratio={0.1}>
+                    <Balancer ratio={0.1} autoFocus>
                         Programming now in{" "}
                         {/* <span className="line-through decoration-slate-600"> */}
                         <span className="line-through decoration-gray-700">
@@ -104,10 +104,12 @@ const Hero = () => {
                     variants={FADE_DOWN_ANIMATION_VARIANTS}
                     className="-mb-4"
                 >
-                    <button className="group mx-auto mt-6 flex max-w-fit items-center justify-center space-x-2 rounded-full border border-black bg-black px-5 py-2 text-sm text-white transition-colors hover:bg-white hover:text-black">
-                        <Code2 className="h-5 w-5 text-white group-hover:text-black" />
-                        <p>Start Coding</p>
-                    </button>
+                    <a href="#playground">
+                        <button className="group mx-auto mt-6 flex max-w-fit items-center justify-center space-x-2 rounded-full border border-black bg-black px-5 py-2 text-sm text-white transition-colors hover:bg-white hover:text-black">
+                            <Code2 className="h-5 w-5 text-white group-hover:text-black" />
+                            <p>Start Coding</p>
+                        </button>
+                    </a>
                 </motion.div>
             </motion.div>
         </main>
