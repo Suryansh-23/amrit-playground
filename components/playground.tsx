@@ -16,6 +16,7 @@ import { Programs } from "@/data/presets";
 import Badges from "@/components/badges";
 import CodeEditor from "@/components/code-editor";
 import Tips from "@/components/tips";
+import { useToast } from "@/components/ui/use-toast";
 import amrit, { builtins, keywords } from "@/data/amrit";
 import clsx from "clsx";
 import { decompressFromEncodedURIComponent } from "lz-string";
@@ -28,7 +29,6 @@ import "prismjs/themes/prism.css";
 import { useEffect, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import useClipboard from "react-use-clipboard";
-import { set } from "date-fns";
 
 const lexend = Lexend({ subsets: ["latin"] });
 const programmingTips = [
@@ -87,6 +87,7 @@ const Playground = () => {
     const [selectedPreset, setSelectedPreset] = useState<string>("");
     const [, copyCode] = useClipboard(data.code);
     const [, copyOutput] = useClipboard(data.output);
+    const { toast } = useToast();
 
     const deletePreset = (name: string) => {
         const { [name]: _, ...rest } = programPresets;
@@ -119,12 +120,24 @@ const Playground = () => {
         keyboardEvent?.preventDefault();
         console.log("generating output");
 
-        setData({
-            ...data,
-            // @ts-ignore-next-line
-            output: ScriptMode(data.code),
-        });
-        localStorage.setItem("playground", JSON.stringify(data));
+        try {
+            setData({
+                ...data,
+                // @ts-ignore-next-line
+                output: ScriptMode(data.code),
+            });
+            localStorage.setItem("playground", JSON.stringify(data));
+            toast({
+                title: "Code Executed",
+                description: "The code has been executed",
+            });
+        } catch {
+            toast({
+                title: "Error",
+                description: "There was an error executing the code",
+                variant: "destructive",
+            });
+        }
     };
 
     useHotkeys("ctrl+enter", runScriptModeCode);
@@ -224,7 +237,14 @@ const Playground = () => {
                                                             Program
                                                         </label>
                                                         <Button
-                                                            onClick={copyCode}
+                                                            onClick={() => {
+                                                                copyCode();
+                                                                toast({
+                                                                    title: "Copied to clipboard",
+                                                                    description:
+                                                                        "The code has been copied to your clipboard",
+                                                                });
+                                                            }}
                                                         >
                                                             <Copy className="h-4 w-4 mx-1" />
                                                             Copy
@@ -276,7 +296,14 @@ const Playground = () => {
                                                         Output
                                                     </label>
                                                     <Button
-                                                        onClick={copyOutput}
+                                                        onClick={() => {
+                                                            copyOutput();
+                                                            toast({
+                                                                title: "Copied to clipboard",
+                                                                description:
+                                                                    "The output has been copied to your clipboard",
+                                                            });
+                                                        }}
                                                     >
                                                         <Copy className="h-4 w-4 mx-1" />
                                                         Copy
@@ -308,6 +335,11 @@ const Playground = () => {
                                                     setData({
                                                         ...data,
                                                         output: "",
+                                                    });
+                                                    toast({
+                                                        title: "Console Cleared",
+                                                        description:
+                                                            "The console has been cleared",
                                                     });
                                                 }}
                                             >

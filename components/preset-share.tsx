@@ -8,12 +8,13 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/components/ui/use-toast";
 import { compressToEncodedURIComponent } from "lz-string";
-import { playgroundData } from "./playground";
+import { QRCodeSVG } from "qrcode.react";
 import { useState } from "react";
 import useClipboard from "react-use-clipboard";
-import { QRCodeSVG } from "qrcode.react";
-import { Separator } from "@/components/ui/separator";
+import { playgroundData } from "./playground";
 
 interface PresetShareProps {
     data: playgroundData;
@@ -22,6 +23,7 @@ interface PresetShareProps {
 export function PresetShare({ data }: PresetShareProps) {
     const [shareURL, setShareURL] = useState<string>("");
     const [, copyShareURL] = useClipboard(shareURL);
+    const { toast } = useToast();
 
     return (
         <Popover>
@@ -30,7 +32,7 @@ export function PresetShare({ data }: PresetShareProps) {
                     variant="secondary"
                     onClick={() => {
                         setShareURL(
-                            `http://localhost:3000/?play=${compressToEncodedURIComponent(
+                            `https://amrit-playground.vercel.app/?play=${compressToEncodedURIComponent(
                                 JSON.stringify(data)
                             )}`
                         );
@@ -90,7 +92,13 @@ export function PresetShare({ data }: PresetShareProps) {
                         type="submit"
                         size="sm"
                         className="px-3"
-                        onClick={copyShareURL}
+                        onClick={() => {
+                            copyShareURL();
+                            toast({
+                                title: "Link Copied!",
+                                description: "You can now share the link.",
+                            });
+                        }}
                     >
                         <span className="sr-only">Copy</span>
                         <Copy className="h-4 w-4" />
