@@ -93,7 +93,13 @@ html {
     background-position: center;
     background-size: cover;
     mask-image: linear-gradient(to bottom, black 85%, transparent);
-    box-shadow: 0 0 200px 5px rgba(0, 0, 0, 0.7) inset;
+    box-shadow: 0 0 200px 40px rgba(0, 0, 0, 0.7) inset;
+}
+
+.mask {
+    background: rgba(255, 255, 255, 0.4);
+    /* background: red; */
+    mask-image: radial-gradient(circle at center, black 25%, transparent 50%);
 }
 
 .glass {
@@ -108,14 +114,14 @@ html {
     border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
-.hero-content {
+/* .hero-content {
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 168 100"><ellipse cx="84" cy="50" rx="84" ry="50" fill="rgba(255, 255, 255, 0.1)"/></svg>');
     background-repeat: no-repeat;
-}
+} */
 
 code[data-chip="code"] {
     @apply bg-gray-300 px-1 rounded-md;

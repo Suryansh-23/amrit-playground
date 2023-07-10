@@ -32,12 +32,13 @@ export function PresetShare({ data }: PresetShareProps) {
                     variant="secondary"
                     onClick={() => {
                         setShareURL(
-                            `https://amrit-playground.vercel.app/?play=${compressToEncodedURIComponent(
+                            `${
+                                window.location.href
+                            }?play=${compressToEncodedURIComponent(
                                 JSON.stringify(data)
                             )}`
                         );
-                    }}
-                >
+                    }}>
                     Share
                 </Button>
             </PopoverTrigger>
@@ -52,8 +53,7 @@ export function PresetShare({ data }: PresetShareProps) {
                         </h1>
                         <div
                             id="svg-container"
-                            className="ring-8 ring-gray-200 rounded"
-                        >
+                            className="ring-8 ring-gray-200 rounded">
                             <QRCodeSVG
                                 value={shareURL}
                                 size={128}
@@ -98,8 +98,7 @@ export function PresetShare({ data }: PresetShareProps) {
                                 title: "Link Copied!",
                                 description: "You can now share the link.",
                             });
-                        }}
-                    >
+                        }}>
                         <span className="sr-only">Copy</span>
                         <Copy className="h-4 w-4" />
                     </Button>

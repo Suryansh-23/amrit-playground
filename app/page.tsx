@@ -35,8 +35,7 @@ export default function Home() {
                 </h1>
                 <div
                     className="py-20"
-                    style={{ backgroundImage: "url('/playground-bg.jpg')" }}
-                >
+                    style={{ backgroundImage: "url('/playground-bg.jpg')" }}>
                     <Playground />
                 </div>
             </main>

@@ -1,5 +1,9 @@
+import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
+import { Lexend } from "next/font/google";
 import React, { useEffect, useState } from "react";
+
+const lexend = Lexend({ subsets: ["latin"] });
 
 interface TipsProps {
     tips: string[];
@@ -19,10 +23,16 @@ const Tips: React.FC<TipsProps> = ({ tips }) => {
     }, [tips.length]);
 
     return (
-        <div className="p-4 bg-gray-200 rounded-xl">
+        <div
+            // className="p-4 bg-gray-200 rounded-xl"
+            className="p-4 bg-primary rounded-xl">
             <AnimatePresence mode="wait">
                 <motion.p
-                    className="text-gray-600 font-semibold text-center"
+                    // className="text-gray-600 font-semibold text-center"
+                    className={clsx(
+                        "text-primary-foreground font-semibold text-center  ",
+                        lexend.className
+                    )}
                     key={currentTip}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -30,8 +40,7 @@ const Tips: React.FC<TipsProps> = ({ tips }) => {
                     transition={{
                         duration: 0.5,
                         ease: "easeInOut",
-                    }}
-                >
+                    }}>
                     {tips[currentTip]}
                 </motion.p>
             </AnimatePresence>

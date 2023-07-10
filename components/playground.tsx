@@ -62,28 +62,12 @@ const Playground = () => {
     const searchParams = useSearchParams();
     const play = searchParams.get("play");
 
-    let tmp = {
-        code: Object.values(Programs)[0],
+    const [data, setData] = useState<playgroundData>({
+        code: "",
         note: "",
         output: "",
-    };
-    if (localStorage.getItem("playground")) {
-        tmp = JSON.parse(localStorage.getItem("playground") as string);
-    }
-    if (play) {
-        tmp = JSON.parse(decompressFromEncodedURIComponent(play as string));
-    }
-
-    let localProgramPresets: Programs = Programs;
-    if (localStorage.getItem("playground-programs")) {
-        localProgramPresets = JSON.parse(
-            localStorage.getItem("playground-programs") as string
-        ) as Programs;
-    }
-
-    const [data, setData] = useState<playgroundData>(tmp);
-    const [programPresets, setProgramPresets] =
-        useState<Programs>(localProgramPresets);
+    });
+    const [programPresets, setProgramPresets] = useState<Programs>({});
     const [selectedPreset, setSelectedPreset] = useState<string>("");
     const [, copyCode] = useClipboard(data.code);
     const [, copyOutput] = useClipboard(data.output);
@@ -159,9 +143,30 @@ const Playground = () => {
                 console.error("Failed to load Wasm file:", error);
             }
         };
-
         loadWasm();
-    }, []);
+
+        let tmp = {
+            code: Object.values(Programs)[0],
+            note: "",
+            output: "",
+        };
+        if (localStorage.getItem("playground")) {
+            tmp = JSON.parse(localStorage.getItem("playground") as string);
+        }
+        if (play) {
+            tmp = JSON.parse(decompressFromEncodedURIComponent(play as string));
+        }
+
+        let localProgramPresets: Programs = Programs;
+        if (localStorage.getItem("playground-programs")) {
+            localProgramPresets = JSON.parse(
+                localStorage.getItem("playground-programs") as string
+            ) as Programs;
+        }
+
+        setData(tmp);
+        setProgramPresets(localProgramPresets);
+    }, [play, setData, setProgramPresets]);
 
     return (
         <div className="w-4/5 mx-auto rounded-[2rem]">
@@ -170,10 +175,9 @@ const Playground = () => {
                     <div className="container flex flex-col items-start justify-between space-y-2 py-4 sm:flex-row sm:items-center sm:space-y-0 md:h-16">
                         <h2
                             className={clsx(
-                                "text-xl font-semibold",
+                                "text-2xl font-bold tracking-[0.01em]",
                                 lexend.className
-                            )}
-                        >
+                            )}>
                             Playground
                         </h2>
                         <div className="ml-auto flex w-full space-x-2 sm:justify-end">
@@ -232,8 +236,7 @@ const Playground = () => {
                                                     <div className="flex felx-row justify-between">
                                                         <label
                                                             className="text-lg"
-                                                            htmlFor="input"
-                                                        >
+                                                            htmlFor="input">
                                                             Program
                                                         </label>
                                                         <Button
@@ -244,8 +247,7 @@ const Playground = () => {
                                                                     description:
                                                                         "The code has been copied to your clipboard",
                                                                 });
-                                                            }}
-                                                        >
+                                                            }}>
                                                             <Copy className="h-4 w-4 mx-1" />
                                                             Copy
                                                         </Button>
@@ -261,8 +263,7 @@ const Playground = () => {
                                                 <div className="flex flex-col space-y-2">
                                                     <Label
                                                         className="text-lg"
-                                                        htmlFor="notes"
-                                                    >
+                                                        htmlFor="notes">
                                                         Notes
                                                     </Label>
                                                     <Textarea
@@ -291,8 +292,7 @@ const Playground = () => {
                                                 <div className="flex felx-row justify-between">
                                                     <label
                                                         className="text-lg"
-                                                        htmlFor="input"
-                                                    >
+                                                        htmlFor="input">
                                                         Output
                                                     </label>
                                                     <Button
@@ -303,16 +303,14 @@ const Playground = () => {
                                                                 description:
                                                                     "The output has been copied to your clipboard",
                                                             });
-                                                        }}
-                                                    >
+                                                        }}>
                                                         <Copy className="h-4 w-4 mx-1" />
                                                         Copy
                                                     </Button>
                                                 </div>
                                                 <div
                                                     id="output"
-                                                    className="mt-[21px] min-h-[300px] rounded-md border bg-muted lg:min-h-[550px] h-full font-mono p-2"
-                                                >
+                                                    className="mt-[21px] min-h-[300px] rounded-md border bg-muted lg:min-h-[550px] h-full font-mono p-2">
                                                     {data.output}
                                                 </div>
                                             </div>
@@ -324,8 +322,7 @@ const Playground = () => {
                                                     runScriptModeCode(
                                                         undefined
                                                     );
-                                                }}
-                                            >
+                                                }}>
                                                 <Play className="h-5 w-5 text-white mx-1" />
                                                 Run
                                             </Button>
@@ -341,8 +338,7 @@ const Playground = () => {
                                                         description:
                                                             "The console has been cleared",
                                                     });
-                                                }}
-                                            >
+                                                }}>
                                                 <Eraser className="h-4 w-4 mx-1" />
                                                 Clear Console
                                             </Button>

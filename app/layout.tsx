@@ -1,6 +1,7 @@
 "use client";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
+import { Analytics } from "@vercel/analytics/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Inter } from "next/font/google";
 import Script from "next/script";
@@ -29,19 +30,18 @@ export default function RootLayout({
                 <ThemeProvider
                     attribute="class"
                     defaultTheme="light"
-                    enableSystem
-                >
+                    enableSystem>
                     <AnimatePresence>
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                        >
+                            exit={{ opacity: 0 }}>
                             {children}
                             <Toaster />
                         </motion.div>
                     </AnimatePresence>
                 </ThemeProvider>
+                <Analytics />
             </body>
         </html>
     );

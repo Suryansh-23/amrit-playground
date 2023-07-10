@@ -33,15 +33,13 @@ const Hero = () => {
                             staggerChildren: 0.15,
                         },
                     },
-                }}
-            >
+                }}>
                 <motion.a
                     variants={FADE_DOWN_ANIMATION_VARIANTS}
                     href="https://twitter.com/SuriPuri23"
                     target="_blank"
                     rel="noreferrer"
-                    className="mx-auto mb-5 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full bg-blue-100 px-7 py-2 transition-colors hover:bg-blue-200"
-                >
+                    className="mx-auto mb-5 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full bg-blue-100 px-7 py-2 transition-colors hover:bg-blue-200">
                     <Twitter className="h-5 w-5 text-[#1d9bf0]" />
                     <p className="text-sm font-semibold text-[#1d9bf0]">
                         Introducing Amrit
@@ -52,8 +50,7 @@ const Hero = () => {
                         "bg-gradient-to-br from-black to-stone-500 bg-clip-text text-center font-display text-4xl font-bold tracking-[-0.02em] text-transparent drop-shadow-sm md:text-7xl md:leading-[6rem]",
                         lexend.className
                     )}
-                    variants={FADE_DOWN_ANIMATION_VARIANTS}
-                >
+                    variants={FADE_DOWN_ANIMATION_VARIANTS}>
                     <Balancer ratio={0.1} autoFocus>
                         Programming now in{" "}
                         {/* <span className="line-through decoration-slate-600"> */}
@@ -66,9 +63,8 @@ const Hero = () => {
                     </Balancer>
                 </motion.h1>
                 <motion.p
-                    className="mt-6 text-center font-medium text-gray-600 md:text-xl"
-                    variants={FADE_DOWN_ANIMATION_VARIANTS}
-                >
+                    className="mt-6 text-center font-medium text-gray-700 md:text-xl"
+                    variants={FADE_DOWN_ANIMATION_VARIANTS}>
                     <Balancer ratio={0.6}>
                         Programming is best understood when it is in your own
                         language.{" "}
@@ -89,8 +85,7 @@ const Hero = () => {
                                             href="https://github.com/Suryansh-23/amrit"
                                             target="_blank"
                                             rel="noreferrer noopener"
-                                            className="mt-4 group mx-auto flex max-w-fit items-center justify-center space-x-2 rounded-full border border-black bg-black px-5 py-2 text-sm text-white transition-colors hover:bg-white hover:text-black"
-                                        >
+                                            className="mt-4 group mx-auto flex max-w-fit items-center justify-center space-x-2 rounded-full border border-black bg-black px-5 py-2 text-sm text-white transition-colors hover:bg-white hover:text-black">
                                             <Github className="h-5 w-5 mr-2 text-white transition-all group-hover:text-black" />
                                             Github Repo
                                         </Link>
@@ -102,8 +97,7 @@ const Hero = () => {
                 </motion.p>
                 <motion.div
                     variants={FADE_DOWN_ANIMATION_VARIANTS}
-                    className="-mb-4"
-                >
+                    className="-mb-4">
                     <a href="#playground">
                         <button className="group mx-auto mt-6 flex max-w-fit items-center justify-center space-x-2 rounded-full border border-black bg-black px-5 py-2 text-sm text-white transition-colors hover:bg-white hover:text-black">
                             <Code2 className="h-5 w-5 text-white group-hover:text-black" />
@@ -112,6 +106,7 @@ const Hero = () => {
                     </a>
                 </motion.div>
             </motion.div>
+            <div className="absolute w-full h-full top-0 left-0 z-0 mask" />
         </main>
     );
 };
